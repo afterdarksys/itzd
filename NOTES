@@ -1,0 +1,37 @@
+Ecosystem: Internet Token Zone Agency 
+Domain: itz.agency
+Software: itzd
+Options:
+	itzd config
+	itzd login
+	itzd api-key key.json
+	itzd api <args>
+	itzd dns network <name> <value> <ttl> <args>
+	itzd wallet network <name> <value> <wallet> <args>
+	itzd peers network <opts>
+	itzd network <net> transactions
+	itzd balances <network>
+	itzd daemon <start|stop|pause|refresh|restart>
+	itzd dns grpc 
+
+config - would set up the config for the client and link it to the website
+       - create keys used for peer to peer
+       - tag wallets
+       - add metadata
+login - will into the itz network
+api-key - can be used to create api keys
+dns network ... for managing the wallets in our DNS
+wallet for creating wallets
+peers show local peers, hashed
+network view dns transations on a given network
+show balances of wallet
+daemon run as a service
+launch a grpc server
+
+Now imagine this:
+
+We support regular DNS and experimental dns records
+itzd can be used to create a distributed dns <-> wallet resolution service
+can cache name to wallet resolution lookups
+other things I didn't think
+
