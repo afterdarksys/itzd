@@ -1,0 +1,63 @@
+List of libraries and networks they implement:
+
+Run these to source free local data
+go-ethereum - L1/L2 - main
+go-solana - L1/L2 - main
+go-p2p - Nice to have 
+go-xrpl - Should have
+geth-lte - Nice to have
+libp2p - Should have
+
+correlate with our intel: dnsscience.io,darkapi.io,walletlists
+
+
+High Level:
+solana,ether,lte,xrp implement them as "threads that work on one daemon in Go
+
+So it looks like this:
+dnsscienced->itz.agency
+itzd - daemonthat integrates with itz.agemcy
+p2p-treasuryd/eth  p2p-registy
+	     5/sol -> name
+     	     3/ltc -> name
+             2/xrp -> name
+
+Notes:
+Anything EVM = supported by go-ethereum
+	 EVM can be L1,L2, or L3
+Non-EVM L1's below
+Cosmos L1
+Polkadot L1
+A few others
+
+Issues: quicknode, other companies expensive
+			// EVM
+			{"e",    "Ethereum mainnet",          "eip155:1"},
+t of libraries and networks they implement:
+			{"poly", "Polygon",                   "eip155:137"},
+			{"arb",  "Arbitrum One",              "eip155:42161"},
+			{"op",   "Optimism",                  "eip155:10"},
+			{"cb",   "Base (Coinbase L2)",         "eip155:8453"},
+			{"bnb",  "BNB Chain",                 "eip155:56"},
+			{"a",    "Avalanche C-Chain",          "eip155:43114"},
+			{"zk",   "zkSync Era",                "eip155:324"},
+			{"ftm",  "Fantom",                    "eip155:			{"celo", "Celo",                      "eip155:42220"},
+			// Non-EVM
+			{"b",    "Bitcoin",                   "bip122:btc"},
+			{"s",    "Solana",                    "solana:sol"},
+			{"apt",  "Aptos",                     "aptos:mainnet"},
+			{"r",    "Ripple/XRP",                "xrpl:mainnet"},
+			{"near", "NEAR Protocol",             "near:mainnet"},
+			{"sui",  "Sui",                       "sui:mainnet"},
+			{"algo", "Algorand",                  "algorand:mainnet"},
+			// Cosmos
+			{"atom", "Cosmos Hub",                "cosmos:cosmoshub-4"},
+			{"osmo", "Osmosis",                   "cosmos:osmosis-1"},
+			// Polkadot
+			{"dot",  "Polkadot",                  "polkadot:91b171bb"},
+			{"ksm",  "Kusama",                    "polkadot:b0a8d493"},
+			// Other
+			{"xtz",  "Tezos",                     "tezos:mainnet"},
+			{"ada",  "Cardano",                   "cardano:mainnet"},
+			{"hbar", "Hedera Hashgraph",          "hedera:mainnet"},
+		
