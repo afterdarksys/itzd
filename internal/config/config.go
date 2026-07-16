@@ -9,16 +9,22 @@ import (
 )
 
 const (
-	DefaultAPIEndpoint = "https://api.itz.agency"
-	configFileName     = "config.json"
+	DefaultAPIEndpoint         = "https://api.itz.agency"
+	DefaultValidatorEndpoint   = "1.1.1.1:853"
+	DefaultValidatorServerName = "cloudflare-dns.com"
+	DefaultZone                = "itz.agency"
+	configFileName             = "config.json"
 )
 
 // Config holds the local itzd configuration.
 type Config struct {
-	APIEndpoint string `json:"api_endpoint"`
-	Token       string `json:"token,omitempty"`
-	WalletAddr  string `json:"wallet_address,omitempty"`
-	Network     string `json:"network,omitempty"` // ethereum, solana, etc.
+	APIEndpoint         string `json:"api_endpoint"`
+	Token               string `json:"token,omitempty"`
+	WalletAddr          string `json:"wallet_address,omitempty"`
+	Network             string `json:"network,omitempty"` // ethereum, solana, etc.
+	ValidatorEndpoint   string `json:"validator_endpoint,omitempty"`
+	ValidatorServerName string `json:"validator_server_name,omitempty"`
+	DefaultZone         string `json:"default_zone,omitempty"`
 }
 
 func dir() (string, error) {
@@ -45,7 +51,7 @@ func Load() (*Config, error) {
 	}
 	data, err := os.ReadFile(p)
 	if os.IsNotExist(err) {
-		return &Config{APIEndpoint: DefaultAPIEndpoint}, nil
+		return withDefaults(&Config{}), nil
 	}
 	if err != nil {
 		return nil, fmt.Errorf("reading config: %w", err)
@@ -54,10 +60,23 @@ func Load() (*Config, error) {
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, fmt.Errorf("parsing config: %w", err)
 	}
+	return withDefaults(&cfg), nil
+}
+
+func withDefaults(cfg *Config) *Config {
 	if cfg.APIEndpoint == "" {
 		cfg.APIEndpoint = DefaultAPIEndpoint
 	}
-	return &cfg, nil
+	if cfg.ValidatorEndpoint == "" {
+		cfg.ValidatorEndpoint = DefaultValidatorEndpoint
+	}
+	if cfg.ValidatorServerName == "" {
+		cfg.ValidatorServerName = DefaultValidatorServerName
+	}
+	if cfg.DefaultZone == "" {
+		cfg.DefaultZone = DefaultZone
+	}
+	return cfg
 }
 
 // Save writes the config to disk.

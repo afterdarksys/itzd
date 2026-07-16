@@ -12,15 +12,12 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "itzd",
-	Short: "ITZ.agency — DNS-native wallet identity for every chain",
-	Long: `itzd is the CLI for itz.agency, the open standard for mapping
-human-readable names to wallet addresses via DNS.
-
-  ryan.itz.agency → 0x742d35Cc... (Ethereum)
-                  → bc1qxy2kg... (Bitcoin)
-                  → DRpbCBMx... (Solana)
-
-Powered by draft-chins-dnsop-web3-wallet-mapping-03 (IETF).`,
+	Short: "Fail-closed DNSSEC cryptocurrency address resolver",
+	Long: `itzd resolves _waddr TXT records through an authenticated validating
+DNS-over-TLS resolver. Secure DNS is the source of truth; the HTTP API is used
+only for explicit diagnostics and never as an automatic fallback.`,
+	SilenceErrors: true,
+	SilenceUsage:  true,
 }
 
 func Execute() {
