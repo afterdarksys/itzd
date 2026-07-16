@@ -1,0 +1,15 @@
+[
+  {"name":"single EVM record","txt":[["eip155:1:0x0000000000000000000000000000000000000001"]],"requested_chain":"eip155:1","expected_address":"0x0000000000000000000000000000000000000001"},
+  {"name":"TXT character strings are joined","txt":[["eip155:1:0x0000000000000000","000000000000000000000001"]],"requested_chain":"eip155:1","expected_address":"0x0000000000000000000000000000000000000001"},
+  {"name":"multiple chains select exact CAIP-2","txt":[["eip155:1:0x0000000000000000000000000000000000000001"],["solana:mainnet:11111111111111111111111111111111"]],"requested_chain":"solana:mainnet","expected_address":"11111111111111111111111111111111"},
+  {"name":"identical duplicates collapse","txt":[["eip155:1:0x0000000000000000000000000000000000000001"],["eip155:1:0x0000000000000000000000000000000000000001"]],"requested_chain":"eip155:1","expected_address":"0x0000000000000000000000000000000000000001"},
+  {"name":"conflicting addresses fail","txt":[["eip155:1:0x0000000000000000000000000000000000000001"],["eip155:1:0x0000000000000000000000000000000000000002"]],"requested_chain":"eip155:1","expected_error":"CONFLICTING_RECORDS"},
+  {"name":"requested chain absent","txt":[["eip155:1:0x0000000000000000000000000000000000000001"]],"requested_chain":"eip155:137","expected_error":"CHAIN_NOT_FOUND"},
+  {"name":"unknown but well-formed chain parses","txt":[["example:network:address-value"]],"requested_chain":"example:network","expected_address":"address-value"},
+  {"name":"empty namespace","txt":[[":reference:address"]],"requested_chain":"eip155:1","expected_error":"INVALID_RECORD"},
+  {"name":"empty address","txt":[["eip155:1:"]],"requested_chain":"eip155:1","expected_error":"INVALID_RECORD"},
+  {"name":"whitespace is rejected","txt":[[" eip155:1:0x0000000000000000000000000000000000000001"]],"requested_chain":"eip155:1","expected_error":"INVALID_RECORD"},
+  {"name":"malformed namespace","txt":[["EIP155:1:0x0000000000000000000000000000000000000001"]],"requested_chain":"eip155:1","expected_error":"INVALID_RECORD"},
+  {"name":"empty TXT value","txt":[[""]],"requested_chain":"eip155:1","expected_error":"INVALID_RECORD"}
+]
+
