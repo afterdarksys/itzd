@@ -1,5 +1,8 @@
 title = "itzd gitleaks configuration"
 
+[extend]
+useDefault = true
+
 [[allowlists]]
 description = "Cryptographically useless resolver.test DNSSEC fixture keys"
 paths = ['''testdata/secure-zone/Kresolver\.test\.\+013\+\d+\.private''']

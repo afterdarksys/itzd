@@ -52,11 +52,11 @@ Network codes: e=ETH  b=BTC  s=SOL  poly=Polygon  arb=Arbitrum
 		if rec.DNSSynced {
 			fmt.Printf("  DNS sync : ✓ live\n")
 		} else {
-			fmt.Printf("  DNS sync : ⚠ pending (may take up to 60s)\n")
+			fmt.Printf("  DNS sync : ⚠ pending ownership proof and secure publication\n")
 		}
 		fmt.Println()
 		fmt.Println("Verify with:")
 		fmt.Printf("  dig TXT %s\n", rec.DNSName)
-		fmt.Printf("  itzd resolve %s\n", rec.Username)
+		fmt.Printf("  itzd resolve %s --chain %s\n", rec.Username, rec.Namespace)
 	},
 }
