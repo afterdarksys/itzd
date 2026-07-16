@@ -53,8 +53,7 @@ For programmatic use, set ITZ_TOKEN env var instead of interactive login.`,
 		fmt.Println("└──────────────────────────────────────────────────────────────")
 		fmt.Println()
 		fmt.Println("Sign this message with your wallet and paste the signature below.")
-		fmt.Println("Using cast:  cast wallet sign --account <account> --password '' \\")
-		fmt.Printf("             \"$(itzd login --get-message %s)\"\n", address)
+		fmt.Println("For noninteractive use, obtain a token through an audited client and set ITZ_TOKEN.")
 		fmt.Println()
 		fmt.Print("Signature (0x...): ")
 		signature, _ := reader.ReadString('\n')
@@ -84,6 +83,6 @@ For programmatic use, set ITZ_TOKEN env var instead of interactive login.`,
 		fmt.Println()
 		fmt.Printf("✓ Logged in as %s\n", auth.Address)
 		fmt.Printf("  User ID: %s\n", auth.UserID)
-		fmt.Printf("  Token stored in ~/.itzd/config.json\n")
+		fmt.Printf("  Token stored in the user configuration directory\n")
 	},
 }

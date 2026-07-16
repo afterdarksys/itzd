@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestHealthRejectsNon2xxWithoutReturningRawBody(t *testing.T) {
@@ -15,6 +16,18 @@ func TestHealthRejectsNon2xxWithoutReturningRawBody(t *testing.T) {
 	_, err := New(server.URL, "").Health()
 	if err == nil || strings.Contains(err.Error(), "secret upstream body") {
 		t.Fatalf("unexpected error %v", err)
+	}
+}
+
+func TestHealthHonorsHTTPTimeout(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(100 * time.Millisecond)
+	}))
+	defer server.Close()
+	c := New(server.URL, "")
+	c.http.Timeout = 10 * time.Millisecond
+	if _, err := c.Health(); err == nil {
+		t.Fatal("expected timeout")
 	}
 }
 

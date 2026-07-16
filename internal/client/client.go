@@ -180,7 +180,7 @@ func (c *Client) Challenge(address, network string) (*ChallengeResp, error) {
 		return nil, err
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("challenge failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "challenge", Status: code}
 	}
 	var out ChallengeResp
 	return &out, json.Unmarshal(data, &out)
@@ -197,7 +197,7 @@ func (c *Client) VerifyEthereum(address, challenge, signature string) (*AuthResp
 		return nil, err
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("verify failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "verify", Status: code}
 	}
 	var out AuthResp
 	return &out, json.Unmarshal(data, &out)
@@ -213,7 +213,7 @@ func (c *Client) Resolve(username string) (*ResolveResp, error) {
 		return nil, fmt.Errorf("username %q not found", username)
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("resolve failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "resolve", Status: code}
 	}
 	var out ResolveResp
 	return &out, json.Unmarshal(data, &out)
@@ -229,7 +229,7 @@ func (c *Client) ResolveNetwork(username, network string) (*WalletRecord, error)
 		return nil, fmt.Errorf("no %s wallet registered for %q", network, username)
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("resolve failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "resolve", Status: code}
 	}
 	var out WalletRecord
 	return &out, json.Unmarshal(data, &out)
@@ -245,7 +245,7 @@ func (c *Client) Whoami(walletAddress string) (*ReverseResp, error) {
 		return nil, fmt.Errorf("no usernames found for %s", walletAddress)
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("lookup failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "reverse lookup", Status: code}
 	}
 	var out ReverseResp
 	return &out, json.Unmarshal(data, &out)
@@ -272,7 +272,7 @@ func (c *Client) Register(username, network, walletAddress string) (*UsernameRes
 		return nil, fmt.Errorf("plan limit: %s", errResp.Detail["message"])
 	}
 	if code != 201 {
-		return nil, fmt.Errorf("register failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "register", Status: code}
 	}
 	var out UsernameResp
 	return &out, json.Unmarshal(data, &out)
@@ -280,12 +280,15 @@ func (c *Client) Register(username, network, walletAddress string) (*UsernameRes
 
 // Check checks if a username is available.
 func (c *Client) Check(username, network string) (map[string]any, error) {
-	data, _, err := c.post("/username/check", map[string]string{
+	data, code, err := c.post("/username/check", map[string]string{
 		"username": username,
 		"network":  network,
 	})
 	if err != nil {
 		return nil, err
+	}
+	if code < 200 || code >= 300 {
+		return nil, &HTTPError{Operation: "check", Status: code}
 	}
 	var out map[string]any
 	return out, json.Unmarshal(data, &out)
@@ -298,7 +301,7 @@ func (c *Client) MyUsernames() ([]UsernameResp, error) {
 		return nil, err
 	}
 	if code != 200 {
-		return nil, fmt.Errorf("failed (%d): %s", code, data)
+		return nil, &HTTPError{Operation: "list usernames", Status: code}
 	}
 	var out []UsernameResp
 	return out, json.Unmarshal(data, &out)

@@ -28,11 +28,15 @@ type Config struct {
 }
 
 func dir() (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+	base := os.Getenv("XDG_CONFIG_HOME")
+	if base == "" {
+		var err error
+		base, err = os.UserConfigDir()
+		if err != nil {
+			return "", err
+		}
 	}
-	return filepath.Join(home, ".itzd"), nil
+	return filepath.Join(base, "itzd"), nil
 }
 
 func path() (string, error) {
@@ -51,7 +55,9 @@ func Load() (*Config, error) {
 	}
 	data, err := os.ReadFile(p)
 	if os.IsNotExist(err) {
-		return withDefaults(&Config{}), nil
+		cfg := withDefaults(&Config{})
+		applyEnvironment(cfg)
+		return cfg, nil
 	}
 	if err != nil {
 		return nil, fmt.Errorf("reading config: %w", err)
@@ -60,7 +66,9 @@ func Load() (*Config, error) {
 	if err := json.Unmarshal(data, &cfg); err != nil {
 		return nil, fmt.Errorf("parsing config: %w", err)
 	}
-	return withDefaults(&cfg), nil
+	cfg = *withDefaults(&cfg)
+	applyEnvironment(&cfg)
+	return &cfg, nil
 }
 
 func withDefaults(cfg *Config) *Config {
@@ -79,6 +87,15 @@ func withDefaults(cfg *Config) *Config {
 	return cfg
 }
 
+func applyEnvironment(cfg *Config) {
+	if value := os.Getenv("ITZ_API"); value != "" {
+		cfg.APIEndpoint = value
+	}
+	if value := os.Getenv("ITZ_TOKEN"); value != "" {
+		cfg.Token = value
+	}
+}
+
 // Save writes the config to disk.
 func Save(cfg *Config) error {
 	d, err := dir()
@@ -93,5 +110,28 @@ func Save(cfg *Config) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(p, data, 0600)
+	temporary := p + ".tmp"
+	file, err := os.OpenFile(temporary, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return err
+	}
+	if _, err = file.Write(data); err == nil {
+		err = file.Sync()
+	}
+	if closeErr := file.Close(); err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		_ = os.Remove(temporary)
+		return err
+	}
+	if err := os.Chmod(temporary, 0600); err != nil {
+		_ = os.Remove(temporary)
+		return err
+	}
+	if err := os.Rename(temporary, p); err != nil {
+		_ = os.Remove(temporary)
+		return err
+	}
+	return os.Chmod(p, 0600)
 }
