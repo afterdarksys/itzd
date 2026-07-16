@@ -1,0 +1,8 @@
+[
+  {"name":"_waddr.secure.resolver.test.","dnssec":"secure"},
+  {"name":"_waddr.insecure.resolver.test.","dnssec":"insecure"},
+  {"name":"_waddr.bogus.resolver.test.","dnssec":"bogus"},
+  {"name":"_waddr.missing.resolver.test.","dnssec":"secure","rcode":"NXDOMAIN"},
+  {"name":"_waddr.multiple.resolver.test.","dnssec":"secure"},
+  {"name":"_waddr.conflict.resolver.test.","dnssec":"secure"}
+]

@@ -12,6 +12,9 @@ func isolateConfig(t *testing.T) string {
 	t.Setenv("XDG_CONFIG_HOME", root)
 	t.Setenv("ITZ_TOKEN", "")
 	t.Setenv("ITZ_API", "")
+	t.Setenv("ITZ_VALIDATOR_ENDPOINT", "")
+	t.Setenv("ITZ_VALIDATOR_SERVER_NAME", "")
+	t.Setenv("ITZ_DEFAULT_ZONE", "")
 	return root
 }
 

@@ -1,0 +1,96 @@
+; File written on Thu Jul 16 17:43:33 2026
+; dnssec-signzone version 9.20.23
+resolver.test.		60	IN SOA	ns.resolver.test. hostmaster.resolver.test. (
+					2026071601 ; serial
+					60         ; refresh (1 minute)
+					60         ; retry (1 minute)
+					3600       ; expire (1 hour)
+					60         ; minimum (1 minute)
+					)
+			60	RRSIG	SOA 13 2 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					R7rld6NHHYzN3Obcud30V/OLDqZlJoAhf9s3
+					CwjPPKHTTBtCu2Gv225E67VP/8uTxQk5EmDa
+					/1ANLGHwXpry7Q== )
+			60	NS	ns.resolver.test.
+			60	RRSIG	NS 13 2 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					A1gnyb4PcQ7WA9oicLyL47ak0k4wJ/IN2gNr
+					ADs7q8DbgNYrlDJG8F5tNLmUmC5hTUD3SLud
+					MWwUtP/iQ7ZjQQ== )
+			60	NSEC	_waddr.conflict.resolver.test. NS SOA RRSIG NSEC DNSKEY
+			60	RRSIG	NSEC 13 2 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					20iE0e43mGaHehKJLxn37aPty/UFCiHb9eQ6
+					DP44feLGTAuXFcgP1wphUof5s9nK0pWF1T5x
+					UtbvBSg2rrqZog== )
+			60	DNSKEY	256 3 13 (
+					UkJO7v7qmUVTWQgZgWHUaSuhIa1P82dLUSk+
+					as3Mu4aOhKEbAjbJkZDJpQYxpQyYrYdcyOji
+					MB8QhbqLkPnwLA==
+					) ; ZSK; alg = ECDSAP256SHA256 ; key id = 60190
+			60	DNSKEY	257 3 13 (
+					2cfrhOY9PACK4ygDEnTI+gxHRQwqXr1oSlIy
+					omlzz0q2oe1F5e/gbUOAl+ANm5l2MLv2aS6E
+					0x+bViuedzXcsg==
+					) ; KSK; alg = ECDSAP256SHA256 ; key id = 39193
+			60	RRSIG	DNSKEY 13 2 60 (
+					20260815204333 20260716204333 39193 resolver.test.
+					pS48crNQrt0l3l/wouEn0p+6+opoe8H/86Kz
+					MT6+BGiP6Vj1TtTbX1HZArOC6girEUgYS6O/
+					d0SYUbsDflpIfg== )
+			60	RRSIG	DNSKEY 13 2 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					U+5V+KTtVkRhCJjqEurMsahpVfq3UIckj/Ml
+					vOUHSSis2jF1Sy0a/yAkNRGeoEBzLHPKPUY5
+					LOk58KVpHGkMbA== )
+_waddr.conflict.resolver.test. 60 IN TXT "eip155:1:0x0000000000000000000000000000000000000001"
+			60	IN TXT	"eip155:1:0x0000000000000000000000000000000000000002"
+			60	RRSIG	TXT 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					kDY+VGYrHYyML0xMR7Eu6gkM0ALYFw2cAd3C
+					kb4hY0n3zdNr3cZakQs3UGjscrUH4kLUQ6bI
+					G4FeYDzrqh+09A== )
+			60	NSEC	_waddr.multiple.resolver.test. TXT RRSIG NSEC
+			60	RRSIG	NSEC 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					nyE/67HNu+w+wrUqORd8tnAdMd/HyN5w8kou
+					j9ded47cJOHmIFeqSIaNFNCRckVOIFsQVLzw
+					tdftK90XRLGKXw== )
+_waddr.multiple.resolver.test. 60 IN TXT "solana:mainnet:11111111111111111111111111111111"
+			60	IN TXT	"eip155:1:0x0000000000000000000000000000000000000001"
+			60	RRSIG	TXT 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					3ezEK0BXR4XUOxtD7Fo0SAyFnAjlh15Kkr8A
+					hrSzduYxOUSS9i01yLO1Nyu2/JPYJnLwHsxk
+					QM/P4rDYALsrOg== )
+			60	NSEC	ns.resolver.test. TXT RRSIG NSEC
+			60	RRSIG	NSEC 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					Gv0nSVEiWkGfOlyfA7cVD2gUdepkx3QjhLIe
+					saXJHphkxj5lKkCdignzSw4OKOXPNKLmHpDV
+					Otfre6RmEQP7Pw== )
+ns.resolver.test.	60	IN A	192.0.2.53
+			60	RRSIG	A 13 3 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					k24UI0/TqCZaAPeieSGgwraKWqHFP+qzQ9TH
+					hVXL2j66njne0kIiRbJcVoyCh9Qlrx3SEfOZ
+					zUn5NuQAMxUZcQ== )
+			60	NSEC	_waddr.secure.resolver.test. A RRSIG NSEC
+			60	RRSIG	NSEC 13 3 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					8SrmPI/0EK/0ODUKCYFcfvqwVoMpK7ttz9Yw
+					Lp2YLg6ZouRaiYTBAdjEEsxUS5FeN5S6ARox
+					ZdDO/fJTqXI4AQ== )
+_waddr.secure.resolver.test. 60	IN TXT	"eip155:1:0x0000000000000000000000000000000000000001"
+			60	RRSIG	TXT 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					+YLY1OB0J/c53daQAAzbgwyVyMQuNIjT5Oaj
+					yKcOeU4Y99BEoD3+hKpyy/Y8Ad1eC10GIVm2
+					TM3E2Vd6+Vwq7Q== )
+			60	NSEC	resolver.test. TXT RRSIG NSEC
+			60	RRSIG	NSEC 13 4 60 (
+					20260815204333 20260716204333 60190 resolver.test.
+					PImUeJ0RlvSy4rO8ryGsciFApyCve6MudIlP
+					NMnPEqBBgN2Is0Tp4DcA3lr7rh/N7tzpyPC7
+					UcITbloispEPtA== )

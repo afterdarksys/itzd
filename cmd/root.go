@@ -2,12 +2,14 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 	"itz.agency/itzd/internal/client"
 	"itz.agency/itzd/internal/config"
+	"itz.agency/itzd/internal/resolver"
 )
 
 var rootCmd = &cobra.Command{
@@ -23,8 +25,26 @@ only for explicit diagnostics and never as an automatic fallback.`,
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		os.Exit(exitCode(err))
 	}
+}
+
+func exitCode(err error) int {
+	var resolveErr *resolver.ResolveError
+	if !errors.As(err, &resolveErr) {
+		return 1
+	}
+	codes := map[resolver.ErrorCode]int{
+		resolver.CodeNameNotFound: 2, resolver.CodeChainNotFound: 3,
+		resolver.CodeDNSSECRequired: 4, resolver.CodeDNSSECBogus: 5,
+		resolver.CodeInvalidRecord: 6, resolver.CodeInvalidAddress: 7,
+		resolver.CodeConflictingRecords: 8, resolver.CodeResolverUnavailable: 9,
+		resolver.CodeAPIDNSMismatch: 10,
+	}
+	if code, ok := codes[resolveErr.Code]; ok {
+		return code
+	}
+	return 1
 }
 
 // loadConfig loads the config and exits on failure.

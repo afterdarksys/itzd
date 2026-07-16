@@ -94,6 +94,15 @@ func applyEnvironment(cfg *Config) {
 	if value := os.Getenv("ITZ_TOKEN"); value != "" {
 		cfg.Token = value
 	}
+	if value := os.Getenv("ITZ_VALIDATOR_ENDPOINT"); value != "" {
+		cfg.ValidatorEndpoint = value
+	}
+	if value := os.Getenv("ITZ_VALIDATOR_SERVER_NAME"); value != "" {
+		cfg.ValidatorServerName = value
+	}
+	if value := os.Getenv("ITZ_DEFAULT_ZONE"); value != "" {
+		cfg.DefaultZone = value
+	}
 }
 
 // Save writes the config to disk.
