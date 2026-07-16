@@ -55,6 +55,7 @@ func init() {
 		configCmd,
 		loginCmd,
 		resolveCmd,
+		verifyCmd,
 		whoamiCmd,
 		registerCmd,
 		checkCmd,

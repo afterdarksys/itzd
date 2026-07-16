@@ -7,23 +7,42 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
 // Client talks to the itz.agency API.
 type Client struct {
-	base   string
-	token  string
-	http   *http.Client
+	base  string
+	token string
+	http  *http.Client
 }
 
 // New creates a new API client.
 func New(apiEndpoint, token string) *Client {
 	return &Client{
-		base:  apiEndpoint,
+		base:  strings.TrimRight(apiEndpoint, "/"),
 		token: token,
 		http:  &http.Client{Timeout: 15 * time.Second},
 	}
+}
+
+type HTTPError struct {
+	Operation string
+	Status    int
+}
+
+func (e *HTTPError) Error() string {
+	return fmt.Sprintf("%s failed with HTTP %d", e.Operation, e.Status)
+}
+
+func escapedPath(values ...string) string {
+	parts := make([]string, len(values))
+	for i, value := range values {
+		parts[i] = url.PathEscape(value)
+	}
+	return strings.Join(parts, "/")
 }
 
 func (c *Client) do(method, path string, body any) ([]byte, int, error) {
@@ -143,9 +162,12 @@ type NetworksResp struct {
 
 // Health checks if the API is reachable.
 func (c *Client) Health() (map[string]any, error) {
-	data, _, err := c.get("/health")
+	data, code, err := c.get("/health")
 	if err != nil {
 		return nil, err
+	}
+	if code < 200 || code >= 300 {
+		return nil, &HTTPError{Operation: "health", Status: code}
 	}
 	var out map[string]any
 	return out, json.Unmarshal(data, &out)
@@ -183,7 +205,7 @@ func (c *Client) VerifyEthereum(address, challenge, signature string) (*AuthResp
 
 // Resolve looks up all wallets for a username.
 func (c *Client) Resolve(username string) (*ResolveResp, error) {
-	data, code, err := c.get("/resolve/" + username)
+	data, code, err := c.get("/resolve/" + escapedPath(username))
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +221,7 @@ func (c *Client) Resolve(username string) (*ResolveResp, error) {
 
 // ResolveNetwork looks up a wallet for a username on a specific chain.
 func (c *Client) ResolveNetwork(username, network string) (*WalletRecord, error) {
-	data, code, err := c.get("/resolve/" + username + "/" + network)
+	data, code, err := c.get("/resolve/" + escapedPath(username, network))
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +237,7 @@ func (c *Client) ResolveNetwork(username, network string) (*WalletRecord, error)
 
 // Whoami reverse-looks up a wallet address to find registered usernames.
 func (c *Client) Whoami(walletAddress string) (*ReverseResp, error) {
-	data, code, err := c.get("/resolve/wallet/" + walletAddress)
+	data, code, err := c.get("/resolve/wallet/" + escapedPath(walletAddress))
 	if err != nil {
 		return nil, err
 	}
