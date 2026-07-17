@@ -1,6 +1,6 @@
 module itz.agency/itzd
 
-go 1.26.2
+go 1.26.5
 
 require (
 	github.com/btcsuite/btcd v0.24.2
